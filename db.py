@@ -26,7 +26,38 @@ class Posts(db.Model):
             "content": self.content,
             "user_id" : self.user_id
         }
-    
+
+class Library(db.Model):
+    """
+    Library model
+    """
+    __tablename__ = "library"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    netid = db.Column(db.String, nullable=False)
+    major=  db.Column(db.String, nullable=False)
+    year_of_school = db.Column(db.String, nullable=False)
+    profile_photo = db.Column(db.String, nullable=False)
+    intro = db.Column(db.String, nullable=False)
+   
+    posts = db.relationship('Posts', cascade = "delete")
+
+    def serialize(self):
+        """
+        serialize user information
+        """
+        return {
+            "id": self.id,
+            "name": self.name,
+            "netid": self.netid,
+            "major": self.major,
+            "year of school": self.year_of_school,
+            "profile photo": self.profile_photo,
+            "self introduction": self.intro,
+            "posts": [post.serialize() for post in self.posts]
+            }
+            
+            
 class Users(db.Model):
     """
     User model
